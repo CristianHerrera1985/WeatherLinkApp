@@ -2,14 +2,17 @@ package com.saintleo.weatherlinkapp
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
 
 class HomeActivity : AppCompatActivity() {
+
     private lateinit var etCity: EditText
     private lateinit var btnSearch: Button
     private lateinit var tvCityName: TextView
@@ -18,7 +21,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var imgWeatherIcon: ImageView
     private lateinit var btnFavorite: Button
     private lateinit var forecastLayout: LinearLayout
-    lateinit var mainLayout: ConstraintLayout
+    private lateinit var mainLayout: ConstraintLayout
 
     private var isFavorite = false
     private val apiKey = "75c3bbccead74871b6734245250511" // https://www.weatherapi.com/
@@ -36,9 +39,9 @@ class HomeActivity : AppCompatActivity() {
         imgWeatherIcon = findViewById(R.id.imgWeatherIcon)
         btnFavorite = findViewById(R.id.btnFavorite)
         forecastLayout = findViewById(R.id.forecastLayout)
-        mainLayout =  findViewById<ConstraintLayout>(R.id.mainLayout)
+        mainLayout = findViewById(R.id.mainLayout)
 
-        // Acción buscar
+        // Acción: Buscar ciudad
         btnSearch.setOnClickListener {
             val city = etCity.text.toString().trim()
             if (city.isNotEmpty()) {
@@ -49,7 +52,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        // Acción favoritos
+        // Acción: Favoritos
         btnFavorite.setOnClickListener {
             isFavorite = !isFavorite
             if (isFavorite) {
@@ -68,6 +71,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    // --- Clima actual ---
     private fun getWeather(city: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.weatherapi.com/")
@@ -78,10 +82,7 @@ class HomeActivity : AppCompatActivity() {
         val call = service.getCurrentWeather(apiKey, city)
 
         call.enqueue(object : Callback<WeatherApiResponse> {
-            override fun onResponse(
-                call: Call<WeatherApiResponse>,
-                response: Response<WeatherApiResponse>
-            ) {
+            override fun onResponse(call: Call<WeatherApiResponse>, response: Response<WeatherApiResponse>) {
                 if (response.isSuccessful) {
                     val weather = response.body()
                     weather?.let {
@@ -106,6 +107,7 @@ class HomeActivity : AppCompatActivity() {
         })
     }
 
+    // --- Pronóstico ---
     private fun getForecast(city: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.weatherapi.com/v1/")
@@ -128,6 +130,7 @@ class HomeActivity : AppCompatActivity() {
                         val tvAvgTemp = forecastView.findViewById<TextView>(R.id.tvAvgTemp)
                         val tvCondition = forecastView.findViewById<TextView>(R.id.tvCondition)
                         val imgIcon = forecastView.findViewById<ImageView>(R.id.imgIcon)
+                        val cardView = forecastView.findViewById<CardView>(R.id.forecastCard)
 
                         tvDate.text = day.date
                         tvAvgTemp.text = "${day.day.avgtemp_c}°C"
@@ -135,6 +138,37 @@ class HomeActivity : AppCompatActivity() {
                         Glide.with(this@HomeActivity)
                             .load("https:${day.day.condition.icon}")
                             .into(imgIcon)
+
+                        val condition = day.day.condition.text.lowercase()
+
+                        // 🎨 Colores coherentes con la nueva paleta (con soporte español + inglés)
+                        val cardColor = when {
+                            condition.contains("sunny") || condition.contains("soleado") ->
+                                Color.parseColor("#FFF59D") // Amarillo suave
+
+                            condition.contains("clear") || condition.contains("despejado") ->
+                                Color.parseColor("#FFF9C4") // Luz diurna
+
+                            condition.contains("cloud") || condition.contains("nublado") ->
+                                Color.parseColor("#CFD8DC") // Gris claro
+
+                            condition.contains("rain") || condition.contains("lluvia") ->
+                                Color.parseColor("#81D4FA") // Azul lluvia
+
+                            condition.contains("storm") || condition.contains("tormenta") ->
+                                Color.parseColor("#90A4AE") // Gris azulado medio
+
+                            condition.contains("snow") || condition.contains("nieve") ->
+                                Color.parseColor("#E1F5FE") // Azul muy claro
+
+                            condition.contains("night") || condition.contains("noche") ->
+                                Color.parseColor("#3F51B5") // Azul noche
+
+                            else -> Color.parseColor("#ECEFF1") // Neutro claro
+                        }
+
+                        // Aplicar color a la card
+                        cardView.setCardBackgroundColor(cardColor)
 
                         forecastLayout.addView(forecastView)
                     }
@@ -147,19 +181,69 @@ class HomeActivity : AppCompatActivity() {
         })
     }
 
-    // 🎨 Cambia el color de fondo según el tipo de clima
+    // --- Fondo dinámico del layout principal ---
     private fun updateBackground(conditionText: String) {
-        val backgroundColor = when {
-            conditionText.contains("sunny", ignoreCase = true) -> Color.parseColor("#FFD54F") // Amarillo claro
-            conditionText.contains("clear", ignoreCase = true) -> Color.parseColor("#FFF176") // Amarillo suave
-            conditionText.contains("cloud", ignoreCase = true) -> Color.parseColor("#90A4AE") // Gris azulado
-            conditionText.contains("rain", ignoreCase = true) -> Color.parseColor("#64B5F6") // Azul lluvia
-            conditionText.contains("snow", ignoreCase = true) -> Color.parseColor("#E0F7FA") // Blanco azulado
-            conditionText.contains("storm", ignoreCase = true) -> Color.parseColor("#455A64") // Gris oscuro
-            conditionText.contains("night", ignoreCase = true) -> Color.parseColor("#283593") // Azul noche
-            else -> Color.parseColor("#B0BEC5") // Gris neutro
+        val text = conditionText.lowercase()
+
+        val backgroundColor: Int
+        val textColor: Int
+
+        when {
+            // Soleado / Sunny
+            text.contains("sunny") || text.contains("soleado") -> {
+                backgroundColor = Color.parseColor("#FFE082") // Amarillo cálido
+                textColor = Color.parseColor("#3E2723") // Marrón oscuro
+            }
+
+            // Despejado / Clear
+            text.contains("clear") || text.contains("despejado") -> {
+                backgroundColor = Color.parseColor("#FFF9C4") // Luz diurna
+                textColor = Color.parseColor("#3E2723")
+            }
+
+            // Nublado / Cloudy
+            text.contains("cloud") || text.contains("nublado") -> {
+                backgroundColor = Color.parseColor("#CFD8DC") // Gris claro
+                textColor = Color.parseColor("#263238") // Gris oscuro
+            }
+
+            // Lluvioso / Rain
+            text.contains("rain") || text.contains("lluvia") -> {
+                backgroundColor = Color.parseColor("#81D4FA") // Azul lluvia
+                textColor = Color.parseColor("#0D47A1") // Azul profundo
+            }
+
+            // Nevado / Snow
+            text.contains("snow") || text.contains("nieve") -> {
+                backgroundColor = Color.parseColor("#E1F5FE") // Azul muy claro
+                textColor = Color.parseColor("#01579B") // Azul oscuro
+            }
+
+            // Tormenta / Storm
+            text.contains("storm") || text.contains("tormenta") -> {
+                backgroundColor = Color.parseColor("#607D8B") // Gris azulado medio
+                textColor = Color.parseColor("#ECEFF1") // Texto claro
+            }
+
+            // Noche / Night
+            text.contains("night") || text.contains("noche") -> {
+                backgroundColor = Color.parseColor("#3F51B5") // Azul noche
+                textColor = Color.parseColor("#FFFFFF") // Blanco
+            }
+
+            // Por defecto
+            else -> {
+                backgroundColor = Color.parseColor("#ECEFF1") // Neutro
+                textColor = Color.parseColor("#212121") // Gris oscuro
+            }
         }
 
-        mainLayout.setBackgroundColor(backgroundColor)
+        // Cambia el color de fondo
+        findViewById<View>(R.id.mainLayout).setBackgroundColor(backgroundColor)
+
+        // Cambia el color de los textos principales
+        tvCityName.setTextColor(textColor)
+        tvTemperature.setTextColor(textColor)
+        tvDescription.setTextColor(textColor)
     }
 }
