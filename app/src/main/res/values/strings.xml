@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WeatherLinkApp</string>
     <string name="default_web_client_id">395344007307-m4uifhljdtisfih0p68ou33t3i3c7v7e.apps.googleusercontent.com</string>
+    <string name="weather_icon">Ícono del clima</string>
 </resources>

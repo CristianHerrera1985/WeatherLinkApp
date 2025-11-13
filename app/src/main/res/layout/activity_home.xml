@@ -1,136 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".HomeActivity">
+    android:background="#F3F6FA"
+    android:padding="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mainLayout"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="@color/background_light">
+        android:gravity="center_horizontal">
 
-        <!-- Campo para buscar ciudad -->
-        <EditText
-            android:id="@+id/etCity"
-            android:layout_width="0dp"
+        <!-- Barra de búsqueda -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Buscar ciudad..."
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:drawableStart="@android:drawable/ic_menu_search"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
 
-        <!-- Botón para buscar -->
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/cityEditText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Ingresa una ciudad"
+                android:padding="12dp"
+                android:background="@android:drawable/edit_text"
+                android:textColor="#000000"
+                android:textColorHint="#888888" />
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Buscar"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Cuadro principal del clima actual -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Buscar"
-            app:layout_constraintTop_toBottomOf="@id/etCity"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="@drawable/bg_weather_card"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
 
-        <!-- Ciudad -->
-        <TextView
-            android:id="@+id/tvCityName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ciudad"
-            android:textStyle="bold"
-            android:textColor="@color/primary_dark"
-            android:textSize="22sp"
-            app:layout_constraintTop_toBottomOf="@id/btnSearch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="24dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-        <!-- Icono -->
-        <ImageView
-            android:id="@+id/imgWeatherIcon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@android:drawable/ic_menu_compass"
-            app:layout_constraintTop_toBottomOf="@id/tvCityName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+                <ImageView
+                    android:id="@+id/weatherIcon"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginEnd="16dp" />
 
-        <!-- Temperatura -->
-        <TextView
-            android:id="@+id/tvTemperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="25°C"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary_accent"
-            app:layout_constraintTop_toBottomOf="@id/imgWeatherIcon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:id="@+id/temperatureText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--°C"
+                    android:textColor="#FFFFFF"
+                    android:textSize="48sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-        <!-- Descripción -->
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Descripción del clima"
-            android:textSize="18sp"
-            android:textColor="@color/secondary_text"
-            app:layout_constraintTop_toBottomOf="@id/tvTemperature"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
+            <TextView
+                android:id="@+id/cityNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ciudad"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp" />
 
-        <!-- Favoritos -->
-        <Button
-            android:id="@+id/btnFavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Agregar a favoritos"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            android:background="@drawable/btn_favorite_ripple"
-            android:drawableStart="@drawable/baseline_favorite_border_24"
-            android:drawablePadding="8dp"
-            android:paddingHorizontal="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tvDescription"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="20dp"
-            android:elevation="4dp" />
+            <TextView
+                android:id="@+id/conditionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Condición"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
 
-        <!-- Pronóstico -->
-        <TextView
-            android:id="@+id/tvForecastTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pronóstico próximos 3 días"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@color/primary_dark"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/btnFavorite"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- Layout de pronóstico -->
+        <!-- Cards del pronóstico -->
         <LinearLayout
             android:id="@+id/forecastLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/tvForecastTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:paddingBottom="24dp" />
+    </LinearLayout>
 </ScrollView>

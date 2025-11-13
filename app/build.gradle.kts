@@ -104,10 +104,10 @@ dependencies {
     // Lifecycle / ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-    // Firebase (Auth ya lo tienes, agrega Firestore si quieres guardar favoritos)
+
     implementation("com.google.firebase:firebase-firestore-ktx:24.5.0")
-    // Optional: Material Components
     implementation("com.google.android.material:material:1.9.0")
+
 }
 
 // Necesario para que Firebase funcione correctamente
