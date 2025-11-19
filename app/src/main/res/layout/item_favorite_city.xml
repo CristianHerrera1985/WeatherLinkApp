@@ -62,6 +62,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Eliminar favorito"
             android:src="@drawable/baseline_delete_24"
-            android:tint="@color/error_red" />
+            app:tint="@color/error_red" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
