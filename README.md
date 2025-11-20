@@ -1,20 +1,28 @@
 ## Descripción del proyecto
-Aplicación Android que muestra el clima actual por ciudad, utilizando la API gratuita de WeatherAPI.com y login con cuenta de Google.
+Aplicación Android que muestra el clima actual por ciudad, utilizando la API gratuita de WeatherAPI.com e inicio de sesión con cuenta de Google.
 
 ## Objetivo
-Facilitar al usuario consultar el clima de manera rápida y personalizada desde su dispositivo Android.
+Facilitar al usuario consultar el clima de manera rápida por ciudad y le permite guardar sus ciudades favoritas.
 
-## Plataforma
-Desarrollada en Android Studio librerías modernas.
+## Framework
+Desarrollada en Android Studio:
+- Kotlin: (codigo fuente)
+- Firebase: (autenticacion y base de datos)
+- WeatherAPI: JSON API gratuita para consultar el clima por ciudad.
+- Git/GitHub: para el control de versiones
 
 ## Funcionalidades principales
 - Inicio de sesión con Google
 - Búsqueda de clima por ciudad
-- Datos actualizados (temperatura, humedad, viento)
-- Guardado de ciudades favoritas
+- Pronostico de los siguientes 3 dias de la ciudad
+- Agregar/eliminar ciudades favoritas
 
 ## Estado actual
-Borrador inicial del proyecto (estructura en desarrollo).
+- Inicio de sesión con Google                      | Estatus: 100%
+- Búsqueda de clima por ciudad                     | Estatus: 100%
+- Pronostico de los siguientes 3 dias de la ciudad | Estatus: 100%
+- Agregar/eliminar ciudades favoritas              | Estatus: 60%
 
-## Integrantes / Autor
+
+## Autor
 Cristian Herrera
