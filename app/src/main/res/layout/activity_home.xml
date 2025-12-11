@@ -90,6 +90,36 @@
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
+        <!-- NUEVOS BOTONES DEBAJO DEL CLIMA -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <Button
+                android:id="@+id/addToFavoritesButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="52dp"
+                android:text="Agregar a Favoritos"
+                android:background="@drawable/rounded_button_selector"
+                android:textColor="#FFFFFF"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/favoritesButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="52dp"
+                android:text="Favoritos"
+                android:background="@drawable/rounded_button_selector"
+                android:foreground="?attr/selectableItemBackground"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
         <!-- Cards del pronóstico -->
         <LinearLayout
             android:id="@+id/forecastLayout"

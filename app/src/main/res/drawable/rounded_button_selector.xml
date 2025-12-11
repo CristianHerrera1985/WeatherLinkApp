@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Color cuando el botón está presionado -->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#303F9F"/> <!-- color presionado -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- Color normal -->
+    <item>
+        <shape>
+            <solid android:color="#3F51B5"/>  <!-- color normal -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+</selector>

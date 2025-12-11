@@ -22,11 +22,14 @@ Emulador de Android Studio con las siguientes caracteristicas:
 - Pronostico de los siguientes 3 dias de la ciudad
 - Agregar/eliminar ciudades favoritas
 
-## Estado Actual del Proyecto
+## Avances del Proyecto
 - Inicio de sesión con Google                      | Estatus: 100%
 - Búsqueda de clima por ciudad                     | Estatus: 100%
 - Pronostico de los siguientes 3 dias de la ciudad | Estatus: 100%
-- Agregar/eliminar ciudades favoritas              | Estatus: 60%
+- Agregar/eliminar ciudades favoritas              | Estatus: 100%
+
+## Estado Actual del Proyecto   
+Proyecto finalizado.
 
 ## Autor
 Cristian Herrera

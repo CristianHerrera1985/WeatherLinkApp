@@ -1,5 +1,6 @@
 package com.saintleo.weatherlinkapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -12,6 +13,9 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import com.saintleo.weatherlinkapp.models.ForecastResponse
 import com.saintleo.weatherlinkapp.models.WeatherApiService
+import com.saintleo.weatherlinkapp.models.FavoriteCity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
 
 class HomeActivity : AppCompatActivity() {
 
@@ -22,6 +26,12 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var cityNameText: TextView
     private lateinit var conditionText: TextView
     private lateinit var forecastLayout: LinearLayout
+
+    // 🔹 NUEVOS BOTONES
+    private lateinit var addToFavoritesButton: Button
+    private lateinit var favoritesButton: Button
+
+    private val db = FirebaseFirestore.getInstance()
 
     private val apiKey = "75c3bbccead74871b6734245250511"
 
@@ -38,6 +48,10 @@ class HomeActivity : AppCompatActivity() {
         conditionText = findViewById(R.id.conditionText)
         forecastLayout = findViewById(R.id.forecastLayout)
 
+        // 🔹 Nuevos botones
+        addToFavoritesButton = findViewById(R.id.addToFavoritesButton)
+        favoritesButton = findViewById(R.id.favoritesButton)
+
         searchButton.setOnClickListener {
             val city = cityEditText.text.toString().trim()
             if (city.isNotEmpty()) {
@@ -45,6 +59,45 @@ class HomeActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Ingresa una ciudad", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // 🔹 Guardar en favoritos
+        addToFavoritesButton.setOnClickListener {
+
+            val cityName = cityNameText.text.toString()
+            val tempC = temperatureText.text.toString().replace("°C", "").trim()
+            val icon = weatherIcon.tag?.toString() ?: ""
+
+            if (cityName == "Ciudad") {
+                Toast.makeText(this, "Busca una ciudad primero", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@setOnClickListener
+
+            val favorite = FavoriteCity(
+                name = cityName,
+                country = "",          // Si luego quieres guardar el país real, se agrega fácil
+                temperature = tempC.toDoubleOrNull() ?: 0.0,
+                iconUrl = icon
+            )
+
+            db.collection("users")
+                .document(uid)
+                .collection("favorites")
+                .document(cityName)   // ← El nombre será el ID del documento
+                .set(favorite)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Ciudad guardada en favoritos", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
+                }
+        }
+
+        // 🔹 Ir a la pantalla de favoritos
+        favoritesButton.setOnClickListener {
+            startActivity(Intent(this, FavoritesActivity::class.java))
         }
     }
 
@@ -70,6 +123,7 @@ class HomeActivity : AppCompatActivity() {
                     val forecast = forecastResponse.forecast
 
                     // --- Clima actual ---
+                    weatherIcon.tag = "https:${current.condition.icon}"
                     Glide.with(this@HomeActivity)
                         .load("https:${current.condition.icon}")
                         .into(weatherIcon)

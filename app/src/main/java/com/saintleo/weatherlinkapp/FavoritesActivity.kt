@@ -55,15 +55,26 @@ class FavoritesActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 favoriteCities.clear()
                 for (document in result) {
+
+                    // 👉 Convertir a objeto
                     val city = document.toObject(FavoriteCity::class.java)
-                    favoriteCities.add(city)
+
+                    // 👉 Si el objeto no tenía name asignado,
+                    // lo tomamos desde el ID del documento.
+                    val fixedCity = city.copy(
+                        name = if (city.name.isEmpty()) document.id else city.name
+                    )
+
+                    favoriteCities.add(fixedCity)
                 }
+
                 adapter.notifyDataSetChanged()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Error al cargar favoritos", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     // --- Eliminar una ciudad de favoritos ---
     private fun deleteFavorite(city: FavoriteCity) {
